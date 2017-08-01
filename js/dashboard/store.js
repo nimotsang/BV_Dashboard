@@ -4,7 +4,7 @@
         ajax: {
 
             "edit": {
-                "url": sysSettings.domainPath + "RaymSP_GatewayPaymentStore",
+                "url": sysSettings.domainPath + "BVSP_Store_UPDATE",
                 "async": true,
                 "crossDomain": true,
                 "type": "POST",
@@ -13,18 +13,20 @@
                 "data": function () {
                     var param = {
                         "token": SecurityManager.generate(),
-                        "username": SecurityManager.username,
-                        "method": 3,
-                        "MerchantName": editor.field('MerchantName').val(),
-                        "Storeid": Number(editor.field('Storeid').val()),
-                        "StoreName": editor.field('StoreName').val()
+                        "Store_ID": editor.field('Store_ID').val(),
+                        "Store_Code": editor.field('Store_Code').val(),
+                        "Store_Name": editor.field('Store_Name').val(),
+                        "Address": editor.field('Address').val(),
+                        "Phone": editor.field('Phone').val(),
+                        "Contacts": editor.field('Address').val(),
+                        "Merchant_ID": editor.field('Merchant_Name').val()
                     }
                     return JSON.stringify(param);
                 }
             },
             "create": {
 
-                "url": sysSettings.domainPath + "RaymSP_GatewayPaymentStore",
+                "url": sysSettings.domainPath + "BVSP_Store_UPDATE",
                 "async": true,
                 "crossDomain": true,
                 "type": "POST",
@@ -33,11 +35,14 @@
                 "data": function () {
                     var param = {
                         "token": SecurityManager.generate(),
-                        "username": SecurityManager.username,
-                        "method": 2,
-                        "MerchantName": editor.field('MerchantName').val(),
-                        "Storeid": Number(editor.field('Storeid').val()),
-                        "StoreName": editor.field('StoreName').val()
+                        "Store_ID": editor.field('Store_ID').val(),
+                        "Store_Code": editor.field('Store_Code').val(),
+                        "Store_Name": editor.field('Store_Name').val(),
+                        "Address": editor.field('Address').val(),
+                        "Phone": editor.field('Phone').val(),
+                        "Contacts": editor.field('Address').val(),
+                        "Merchant_ID": editor.field('Merchant_Name').val()
+
                     }
                     return JSON.stringify(param);
                 }
@@ -45,12 +50,17 @@
 
 
         },
-        idSrc: 'Storeid',
+        idSrc: 'Store_Code',
         table: '#StoreTable',
         fields: [
-            { label: '商户名称: ', name: 'MerchantName', type:'select'},
-            { label: '门店编号: ', name: ('Storeid') },
-            { label: '门店名称: ', name: 'StoreName' }
+            { label: 'Store_ID: ', name: 'Store_ID', type: 'hidden' },
+            { label: 'Merchant_ID: ', name: 'Merchant_ID', type: 'hidden' },
+            { label: '商户名称: ', name: 'Merchant_Name', type: 'select' },
+            { label: '门店编号: ', name: 'Store_Code' },
+            { label: '门店名称: ', name: 'Store_Name' },
+            { label: '门店地址: ', name: 'Address' },
+            { label: '门店电话: ', name: 'Phone' },
+            { label: '联系人: ', name: 'Contacts' }
 
         ],
         //自定义语言
@@ -75,22 +85,22 @@
 
     editor.on('preSubmit', function (e, data, action) {
 
-        var Storeid = editor.field("Storeid");
-        var StoreName = editor.field("StoreName");
-        if (!Storeid.isMultiValue()) {
-            if (!Storeid.val()) {
-                Storeid.error("门店编号不能为空，请重新输入");
+        var Store_Code = editor.field("Store_Code");
+        var Store_Name = editor.field("Store_Name");
+        if (!Store_Code.isMultiValue()) {
+            if (!Store_Code.val()) {
+                Store_Code.error("门店编号不能为空，请重新输入");
             } else if (action !== 'edit') {
-                if (isNaN(Storeid.val())) {
-                    Storeid.error("门店编号只能是数字，请重新输入");
+                if (!checkname(Store_Code.val())) {
+                    Store_Code.error("门店名只能是中文、英文字母和数字，请重新输入");
                 }
             }
         }
-        if (!StoreName.isMultiValue()) {
-            if (!StoreName.val()) {
-                StoreName.error("门店名不能为空，请重新输入")
-            } else if (!checkname(StoreName.val())) {
-                StoreName.error("门店名只能是中文、英文字母和数字，请重新输入");
+        if (!Store_Name.isMultiValue()) {
+            if (!Store_Name.val()) {
+                Store_Name.error("门店名不能为空，请重新输入")
+            } else if (!checkname(Store_Name.val())) {
+                Store_Name.error("门店名只能是中文、英文字母和数字，请重新输入");
             }
         }
 
@@ -104,94 +114,14 @@
 
     });
     editor.on('initEdit', function (e, node, data) {
-        editor.disable(["Storeid", "MerchantName"]);
-        var oMerchantName;
-        var selectMerchant = [];
-
-        // Get existing options
-        oMerchantName = data.MerchantName
-        var param = {};
-        param.token = SecurityManager.generate();
-        param.username = SecurityManager.username;
-
-        $.ajax({
-            "url": sysSettings.domainPath + "RaymSP_GatewayPaymentMerchant_Get",
-            "type": "POST",
-            "async": true,
-            "crossDomain": true,
-            "dataType": "json",
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(param),
-            "success": function (data) {
-                data = data.ResultSets[0]
-                for (var item in data) {
-                    if (data[item].table === 'Merchant') {
-                        if (data[item].label === oMerchantName) {
-                            selectMerchant.unshift({ label: data[item].label, value: data[item].value });
-                        } else {
-                            selectMerchant.push({ label: data[item].label, value: data[item].value });
-                        }
-                    }
-                }
-                editor.field("MerchantName").update(selectMerchant);
-            }
-
-        })
+        editor.disable(["Store_Code","Merchant_Name"]);
+        getMerchant(e,data)
 
     });
-    editor.on('initCreate', function () {
-        editor.enable(["Storeid", "MerchantName"]);
-        var selectMerchant = [];
-        var param = {};
-        param.token = SecurityManager.generate();
-        param.username = SecurityManager.username;
-        $.ajax({
-            "url": sysSettings.domainPath + "RaymSP_GatewayPaymentMerchant_Get",
-            "type": "POST",
-            "async": true,
-            "crossDomain": true,
-            "dataType": "json",
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(param),
-            "success": function (data) {
-                data = data.ResultSets[0]
-                for (var item in data) {
-                    if (data[item].table === 'Merchant') {
-
-
-                        selectMerchant.push({ label: data[item].label, value: data[item].value });
-                    }
-                }
-                editor.field("MerchantName").update(selectMerchant);
-
-
-
-            }
-
-        });
+    editor.on('initCreate', function (e) {
+        editor.enable(["Store_Code", "Merchant_Name"]);
+        getMerchant(e)
     });
-/**
-    editor.field('MerchantName').update(function () {
-        $.ajax({
-            "url": "https://mbeta.pw/mocdbapi/RaymSP_GatewayPaymentMerchant",
-            "type": "POST",
-            "contentType": "application/json; charset=utf-8",
-            "data": function () {
-                var param = [{
-                    "username": 'john',
-                    "method": 1
-                }]
-                return JSON.stringify(param);
-            },
-            success: function () {
-                data = data[0].ResultSets[0]
-                return (data.MerchantName);
-            }
-        })
-
-
-    });
-**/
 
     //初始化报表
     var table=$("#StoreTable").DataTable({
@@ -200,16 +130,16 @@
         select: true,
         order: [[1, "asc"]],
         columns: [
-        { "data": "MerchantName" },
-        { "data": "Storeid" },
-        { "data": "StoreName" }
+        { "data": "Merchant_Name" },
+        { "data": "Store_Code" },
+        { "data": "Store_Name" }
         ],
         "columnDefs":[
             { "width": "20%", "targets": 0 },
             { "width": "20%", "targets": 1 }
         ],
         ajax: {
-            "url": sysSettings.domainPath + "RaymSP_GatewayPaymentStore",
+            "url": sysSettings.domainPath + "BVSP_Store_SEARCH",
             "async": true,
             "crossDomain": true,
             "type": "POST",
@@ -217,8 +147,7 @@
             "contentType": "application/json; charset=utf-8",
             "data": function () {
                 var param = {
-                    "token": SecurityManager.generate(),
-                    "username": SecurityManager.username,
+                    "token": SecurityManager.generate()
                 }
                 return JSON.stringify(param);
             },
@@ -255,6 +184,40 @@
 
          ]
     });
+
+    function getMerchant(e,data) {
+        var oMerchant_ID;
+        var selectMerchant = [];
+
+        // Get existing options
+        if (e.type === 'initEdit') {
+            oMerchant_ID = data.Merchant_ID
+        }
+        var param = {};
+        param.token = SecurityManager.generate();
+
+        $.ajax({
+            "url": sysSettings.domainPath + "BVSP_Merchant_SEARCH",
+            "type": "POST",
+            "async": true,
+            "crossDomain": true,
+            "dataType": "json",
+            "contentType": "application/json; charset=utf-8",
+            "data": JSON.stringify(param),
+            "success": function (data) {
+                data = data.ResultSets[0]
+                for (var item in data) {
+                    if (data[item].Merchant_ID === oMerchant_ID) {
+                        selectMerchant.unshift({ label: data[item].Merchant_Name, value: data[item].Merchant_ID });
+                    } else {
+                        selectMerchant.push({ label: data[item].Merchant_Name, value: data[item].Merchant_ID });
+                    }
+                }
+                editor.field("Merchant_Name").update(selectMerchant);
+            }
+
+        })
+    }
     });
 
 

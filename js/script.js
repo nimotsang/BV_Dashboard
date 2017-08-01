@@ -51,7 +51,7 @@ $(document).ready(function () {
             },
             "success": function (data) {
                 data = data.ResultSets[0][0]
-                if (u === data.UserName) {
+                if (u.toLocaleLowerCase() === data.User_Name.toLocaleLowerCase()) {
                     window.location = "index.html";
                 }
             }

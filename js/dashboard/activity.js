@@ -3,7 +3,7 @@
 
         ajax: {
             "edit": {
-                "url": sysSettings.domainPath + "BVSP_Merchant_UPDATE",
+                "url": sysSettings.domainPath + "BVSP_CAMPAIGN_UPDATE",
                 "async": true,
                 "crossDomain": true,
                 "type": "POST",
@@ -12,17 +12,17 @@
                 "data": function () {
                     var param = {
                         "token": SecurityManager.generate(),
-                        "Merchant_ID": editor.field('Merchant_ID').val(),
-                        "Merchant_Code": editor.field('Merchant_Code').val(),
-                        "Merchant_Name": editor.field('Merchant_Name').val(),
-                        "Merchant_Type_ID": editor.field('Merchant_Type').val()
+                        "Campaign_ID": editor.field('Campaign_ID').val(),
+                        "Campaign_Name": editor.field('Campaign_Name').val(),
+                        "Start_Date": editor.field('Start_Date').val(),
+                        "End_Date": editor.field('End_Date').val()
                     }
                     return JSON.stringify(param);
                 }
             },
             "create": {
 
-                "url": sysSettings.domainPath + "BVSP_Merchant_UPDATE",
+                "url": sysSettings.domainPath + "BVSP_CAMPAIGN_UPDATE",
                 "async": true,
                 "crossDomain": true,
                 "type": "POST",
@@ -31,8 +31,9 @@
                 "data": function () {
                     var param = {
                         "token": SecurityManager.generate(),
-                        "Merchant_Name": editor.field('Merchant_Name').val(),
-                        "Merchant_Type_ID": editor.field('Merchant_Type').val()
+                        "Campaign_Name": editor.field('Campaign_Name').val(),
+                        "Start_Date": editor.field('Start_Date').val(),
+                        "End_Date": editor.field('End_Date').val()
                     }
                     return JSON.stringify(param);
                 }
@@ -40,25 +41,54 @@
 
 
         },
-        idSrc: 'Merchant_Code',
-        table: '#MerchantTable',
+        idSrc: 'Campaign_Code',
+        table: '#ActivityTable',
         fields: [
-            { label: '商户编号: ', name: 'Merchant_ID' , type:'hidden' },
-            { label: '商户编号: ', name: 'Merchant_Code',type:'readonly' },
-            { label: '商户名称: ', name: 'Merchant_Name' },
-            { label: '商户名称: ', name: 'Merchant_Type', type: 'select' }
+            { label: 'Campaign_ID: ', name: 'Campaign_ID', type: 'hidden' },
+            { label: '活动编号: ', name: 'Campaign_Code',type:'readonly' },
+            { label: '活动名称: ', name: 'Campaign_Name' },
+            {
+                label: '开始时间: ', name: 'Start_Date',
+                type: 'datetime',
+                data: function (row) {
+                    if (row.Start_Date.length !== undefined) {
+                        return row.Start_Date.substring(0, 10)
+                    } else {
+                        return new Date();
+                    }
+                },
+                def: function () {
+                    return new Date();
+                },
+                format: 'YYYY-MM-DD',
+            },
+            {
+                label: '结束时间: ', name: 'End_Date',
+                type: 'datetime',
+                data: function (row) {
+                    if (row.End_Date.length !== undefined) {
+                        return row.End_Date.substring(0, 10)
+                    } else {
+                        return new Date();
+                    }
+                },
+                def: function () {
+                    return new Date();
+                },
+                format: 'YYYY-MM-DD',
+            }
 
         ],
         //自定义语言
         i18n: {
             "create": {
                 "button": '新增',
-                "title": '新增商户',
+                "title": '新增活动',
                 "submit": '提交'
             },
             "edit": {
                 "button": '修改',
-                "title": '商户管理',
+                "title": '活动管理',
                 "submit": '提交'
             },
             "multi": {
@@ -75,28 +105,41 @@
 
     });
     editor.on('initEdit', function (e, node, data) {
-        getmerchanttype(e,data);
+        //getmerchanttype(e,data);
     });
     editor.on('initCreate', function (e, data) {
-        getmerchanttype(e, data);;
+        //getmerchanttype(e, data);;
     });
 
     //初始化报表
-    var table=$("#MerchantTable").DataTable({
+    var table=$("#ActivityTable").DataTable({
         processing:false,
         dom:'Bfrtip',
         select: true,
         order: [[0, "asc"]],
         columns: [
-        { "data": "Merchant_Code" },
-        { "data": "Merchant_Name" },
-        { "data": "Merchant_Type_Name" }
+        { "data": "Campaign_Code" },
+        { "data": "Campaign_Name" },
+        {
+            "data": "Start_Date", "render": function (data, type, row) {
+                if (data.length > 0) {
+                    return data.substring(0, 10);
+                }
+            }
+        },
+        {
+            "data": "End_Date", "render": function (data, type, row) {
+                if (data.length > 0) {
+                    return data.substring(0, 10);
+                }
+            }
+        }
         ],
         "columnDefs":[
             {"width":"20%","targets":0}
         ],
         ajax:{
-            "url": sysSettings.domainPath + "BVSP_Merchant_SEARCH",
+            "url": sysSettings.domainPath + "BVSP_CAMPAIGN_SEARCH",
             "async": true,
             "crossDomain": true,
             "type": "POST",

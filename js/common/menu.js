@@ -46,7 +46,7 @@
         document.writeln("                    <span class=\'icon-bar\'></span>");
         document.writeln("                    <span class=\'icon-bar\'></span>");
         document.writeln("                </button>");
-        document.writeln("                <a class=\'navbar-brand\' href=\'index.html\'>支付网关管理系统后台beta</a>");
+        document.writeln("                <a class=\'navbar-brand\' href=\'index.html\'>亿惠权益管理平台</a>");
         document.writeln("            </div>");
         document.writeln("            <ul class=\'nav navbar-top-links navbar-right\'>");
         document.writeln("                <li class=\'dropdown\'>");
