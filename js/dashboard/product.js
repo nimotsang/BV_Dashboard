@@ -43,6 +43,7 @@
         },
         idSrc: 'Product_Code',
         table: '#ProductTable',
+        template: '#Product_Header',
         fields: [
             { label: 'Product_ID: ', name: 'Product_ID', type: 'hidden' },
             { label: '产品编号: ', name: 'Product_Code',type:'readonly' },
@@ -82,6 +83,27 @@
             }
         }
     });
+
+    var Editor = $.fn.DataTable.Editor;
+
+    Editor.display.myDisplayController = $.extend(true, {}, Editor.models.display, {
+        // Create the HTML mark-up needed the display controller
+        init: function (editor) {
+
+            return Editor.display.myDisplayController;
+        },
+
+        // Show the form
+        open: function (editor, form, callback) {
+            alter("Hello");
+        },
+
+        // Hide the form
+        close: function (editor, callback) {
+
+        }
+    });
+
     //主表
     var table;
     //产品明细调整编辑器
@@ -263,6 +285,7 @@
         processing: false,
         dom: 'Bfrtip',
         select: true,
+        "searching": false,
         order: [[0, "asc"]],
         columns: [
         { "data": "Product_Code" },
@@ -313,6 +336,14 @@
                     'excel',
                     'csv'
                 ]
+            },
+            {
+                text: '显示明细',
+                action: function (e, dt, node, config) {
+                    editor.create(false);
+                    $("div#page-header").toggleClass("hidden", "show");
+                    $("div#page-detail").toggleClass("hidden", "show");
+                }
             }
 
 
@@ -536,6 +567,11 @@
         $(editor.node(['Merchant_Code', 'Merchant_Name', 'Store_Code', 'Store_Name', 'Address', 'Phone', 'Contacts'])).appendTo('.tab-2');
 
     };
+    //明细返回按钮
+    $("button#searchreturn").click(function () {
+        $("div#page-detail").toggleClass("hidden", "show");
+        $("div#page-header").toggleClass("hidden", "show");
+    })
 
 });
 
