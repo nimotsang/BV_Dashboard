@@ -1,2 +1,7 @@
 node_modules
 bower_components
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
