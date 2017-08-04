@@ -149,7 +149,7 @@ DataTable.Editor.display.bootstrap = $.extend( true, {}, DataTable.Editor.models
 		// For each instance we need to know when it is opened
 		dte.on( 'open.dtebs', function ( e, type ) {
 			if ( type === 'inline' || type === 'bubble' ) {
-				$('div.DTE input[type=text], div.DTE select, div.DTE textarea').addClass( 'form-control' );
+				$('div.DTE input:not([type=checkbox]):not([type=radio]), div.DTE select, div.DTE textarea').addClass( 'form-control' );
 			}
 		} );
 

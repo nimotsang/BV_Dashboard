@@ -683,6 +683,20 @@ div.DTE div.DTE_Processing_Indicator:after {
     transform: scale(1, 1.5);
   }
 }
+table.dataTable tbody tr.highlight {
+  background-color: #3399ff !important;
+}
+table.dataTable tbody tr.highlight,
+table.dataTable tbody tr.noHighlight,
+table.dataTable tbody tr.highlight td,
+table.dataTable tbody tr.noHighlight td {
+  -webkit-transition: background-color 500ms linear;
+  -moz-transition: background-color 500ms linear;
+  -ms-transition: background-color 500ms linear;
+  -o-transition: background-color 500ms linear;
+  transition: background-color 500ms linear;
+}
+
 div.DTE div.DTE_Processing_Indicator {
   top: 52px;
   right: 12px;

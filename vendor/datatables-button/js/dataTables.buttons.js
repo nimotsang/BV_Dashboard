@@ -1,4 +1,4 @@
-/*! Buttons for DataTables 1.2.2
+/*! Buttons for DataTables 1.3.1
  * ©2016 SpryMedia Ltd - datatables.net/license
  */
 
@@ -48,6 +48,11 @@ var _dtButtons = DataTable.ext.buttons;
  */
 var Buttons = function( dt, config )
 {
+	// If there is no config set it to an empty object
+	if ( typeof( config ) === 'undefined' ) {
+		config = {};	
+	}
+	
 	// Allow a boolean true for defaults
 	if ( config === true ) {
 		config = {};
@@ -251,6 +256,24 @@ $.extend( Buttons.prototype, {
 	{
 		var button = this._nodeToButton( node );
 		return $(button.node);
+	},
+
+	/**
+	 * Set / get a processing class on the selected button
+	 * @param  {boolean} flag true to add, false to remove, undefined to get
+	 * @return {boolean|Buttons} Getter value or this if a setter.
+	 */
+	processing: function ( node, flag )
+	{
+		var button = this._nodeToButton( node );
+
+		if ( flag === undefined ) {
+			return $(button.node).hasClass( 'processing' );
+		}
+
+		$(button.node).toggleClass( 'processing', flag );
+
+		return this;
 	},
 
 	/**
@@ -462,7 +485,8 @@ $.extend( Buttons.prototype, {
 			if ( built.conf.buttons ) {
 				var collectionDom = this.c.dom.collection;
 				built.collection = $('<'+collectionDom.tag+'/>')
-					.addClass( collectionDom.className );
+					.addClass( collectionDom.className )
+					.attr( 'role', 'menu') ;
 				built.conf._collection = built.collection;
 
 				this._expandButton( built.buttons, built.conf.buttons, true, attachPoint );
@@ -569,7 +593,7 @@ $.extend( Buttons.prototype, {
 		}
 
 		if ( config.titleAttr ) {
-			button.attr( 'title', config.titleAttr );
+			button.attr( 'title', text( config.titleAttr ) );
 		}
 
 		if ( ! config.namespace ) {
@@ -1118,7 +1142,7 @@ Buttons.defaults = {
  * @type {string}
  * @static
  */
-Buttons.version = '1.2.2';
+Buttons.version = '1.3.1';
 
 
 $.extend( _dtButtons, {
@@ -1135,7 +1159,7 @@ $.extend( _dtButtons, {
 
 			// Remove any old collection
 			if ( $('div.dt-button-background').length ) {
-				multiLevel = $('div.dt-button-collection').offset();
+				multiLevel = $('.dt-button-collection').offset();
 				$('body').trigger( 'click.dtb-collection' );
 			}
 
@@ -1149,8 +1173,8 @@ $.extend( _dtButtons, {
 
 			if ( multiLevel && position === 'absolute' ) {
 				config._collection.css( {
-					top: multiLevel.top + 5, // magic numbers for a little offset
-					left: multiLevel.left + 5
+					top: multiLevel.top,
+					left: multiLevel.left
 				} );
 			}
 			else if ( position === 'absolute' ) {
@@ -1273,6 +1297,7 @@ $.extend( _dtButtons, {
 			buttons: $.map( vals, function ( val, i ) {
 				return {
 					text: lang[i],
+					className: 'button-page-length',
 					action: function ( e, dt ) {
 						dt.page.len( val ).draw();
 					},
@@ -1396,6 +1421,19 @@ DataTable.Api.registerPlural( 'buttons().nodes()', 'button().node()', function (
 	} ) );
 
 	return jq;
+} );
+
+// Get / set button processing state
+DataTable.Api.registerPlural( 'buttons().processing()', 'button().processing()', function ( flag ) {
+	if ( flag === undefined ) {
+		return this.map( function ( set ) {
+			return set.inst.processing( set.node );
+		} );
+	}
+
+	return this.each( function ( set ) {
+		set.inst.processing( set.node, flag );
+	} );
 } );
 
 // Get / set button text (i.e. the button labels)
@@ -1555,6 +1593,9 @@ var _exportData = function ( dt, inOpts )
 			return str;
 		}
 
+		// Always remove script tags
+		str = str.replace( /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '' );
+
 		if ( config.stripHtml ) {
 			str = str.replace( /<[^>]*>/g, '' );
 		}
@@ -1589,12 +1630,11 @@ var _exportData = function ( dt, inOpts )
 		null;
 
 	var rowIndexes = dt.rows( config.rows, config.modifier ).indexes().toArray();
-	var cells = dt
-		.cells( rowIndexes, config.columns )
+	var selectedCells = dt.cells( rowIndexes, config.columns );
+	var cells = selectedCells
 		.render( config.orthogonal )
 		.toArray();
-	var cellNodes = dt
-		.cells( rowIndexes, config.columns )
+	var cellNodes = selectedCells
 		.nodes()
 		.toArray();
 
