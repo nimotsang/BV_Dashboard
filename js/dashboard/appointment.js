@@ -1,9 +1,11 @@
-﻿$(document).ready(function() {
+﻿$(document).ready(function () {
+
+    var selectphone;
     var editor = new $.fn.dataTable.Editor({
 
         ajax: {
             "edit": {
-                "url": sysSettings.domainPath + "BVSP_Merchant_UPDATE",
+                "url": sysSettings.domainPath + "BVSP_APPOINTMENT_SEARCH",
                 "async": true,
                 "crossDomain": true,
                 "type": "POST",
@@ -12,7 +14,7 @@
                 "data": function () {
                     var param = {
                         "token": SecurityManager.generate(),
-                        "Merchant_ID": editor.field('Merchant_ID').val(),
+                        "Phone": $(''),
                         "Merchant_Code": editor.field('Merchant_Code').val(),
                         "Merchant_Name": editor.field('Merchant_Name').val(),
                         "Merchant_Type_ID": editor.field('Merchant_Type').val()
@@ -87,19 +89,35 @@
     //editor.on('initCreate', function (e, data) {
     //    getmerchanttype(e, data);;
     //});
-    table2.on()
+    // table2.on()
 
+
+    // 查看预约
+    //$('#CustomerTable').on('click', 'a.edit', function (e) {
+    //    e.preventDefault();
+    //    //editor.edit($(this).closest('tr'), {
+    //    //    title: '请确认核销券号',
+    //    //    buttons: '确定'
+    //    console.log(e);
+    //    selectphone = e.rows['Phone'].val();
+    //    alert(e.rows['Phone'].val());
+    //});
+    
     //初始化报表
     var table2 = $("#CustomerTable").DataTable({
+
         processing:false,
-      //  dom:'Bfrtip',
-        select: true,
+        dom:'Bfrtip',
+        select: false,
         order: [[0, "asc"]],
         columns: [
         { "data": "Customer_Name" },
         { "data": "Phone" },
-        { "data": "Address" }
+        { "data": "Address" },
+        { "data": null,
+          "defaultContent": '<a href="#detail" class="edit">查看预约</a>'}
         ],
+
         "columnDefs":[
             {"width":"20%","targets":0}
         ],
@@ -134,26 +152,26 @@
                  }
          },
             //添加按键 编辑，打印及导出
-         //buttons: [
-         //    { extend: 'create', editor: editor, text: '新建' },
-         //    { extend: 'edit', editor: editor, text: '修改' },
-         //    { extend: 'print', text: '打印' },
-         //    {
-         //        extend: 'collection',
-         //        text: '导出到..',
-         //        buttons: [
-         //            'excel',
-         //            'csv'
-         //        ]
-         //    }
+         buttons: [
+           //  { extend: 'create', editor: editor, text: '新建' },
+             { extend: 'edit', editor: editor, text: '修改' },
+             //{ extend: 'print', text: '打印' },
+             //{
+             //    extend: 'collection',
+             //    text: '导出到..',
+             //    buttons: [
+             //        'excel',
+             //        'csv'
+             //    ]
+             //}
 
 
-         //]
+         ]
     });
 
     var table = $("#AppointmentTable2").DataTable({
         processing: false,
-        dom: 'Bfrtip',
+       dom: 'Bfrtip',
         select: true,
         order: [[0, "asc"]],
         columns: [
@@ -168,8 +186,8 @@
         { "data": "Store_Phone" },
         { "data": "Campaign_Name" },
         { "data": "Product_Name" },
-        { "data": "Customer_Name" },
-        { "data": "Customer_Phone" }
+        //{ "data": "Customer_Name" },
+        //{ "data": "Customer_Phone" }
         ],
         "columnDefs": [
             { "width": "5%", "targets": 0 }
@@ -181,12 +199,7 @@
             "type": "POST",
             "dataType": "json",
             "contentType": "application/json; charset=utf-8",
-            "data": function () {
-                var param = {
-                    "token": SecurityManager.generate(),
-                }
-                return JSON.stringify(param);
-            },
+            //"data": ,
             "dataType": "json",
             "dataSrc": function (data) {
                 data = data.ResultSets[0]
@@ -217,8 +230,6 @@
                     'csv'
                 ]
             }
-
-
         ]
     });
 
