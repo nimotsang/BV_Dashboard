@@ -44,7 +44,7 @@
         idSrc: 'Product_Code',
         table: '#ProductTable',
         display: onPageDisplay($('#Product_Header')),
-        template: '#Product_Header',
+        template: '#Product_Template',
         fields: [
             { label: 'Product_ID: ', name: 'Product_ID', type: 'hidden' },
             { label: '产品编号: ', name: 'Product_Code',type:'readonly' },
@@ -56,38 +56,22 @@
 
 
             //门店查询条件
-            { label: '商户代码: ', name: 'Merchant_Code' },
-            { label: '商户名称: ', name: 'Merchant_Name' },
-            { label: '门店代码: ', name: 'Store_Code', type: 'select', placeholder: '未定义' },
-            { label: '门店名称: ', name: 'Store_Name', type: 'select', placeholder: '未定义' },
-            { label: '地址: ', name: 'Address', type: 'select', placeholder: '未定义' },
-            { label: '电话: ', name: 'Phone', type: 'select', placeholder: '未定义' },
-            { label: '联系人: ', name: 'Contacts', type: 'select', placeholder: '未定义' }
+            // { label: '商户代码: ', name: 'Merchant_Code' },
+            // { label: '商户名称: ', name: 'Merchant_Name' },
+            // { label: '门店代码: ', name: 'Store_Code', type: 'select', placeholder: '未定义' },
+            // { label: '门店名称: ', name: 'Store_Name', type: 'select', placeholder: '未定义' },
+            // { label: '地址: ', name: 'Address', type: 'select', placeholder: '未定义' },
+            // { label: '电话: ', name: 'Phone', type: 'select', placeholder: '未定义' },
+            // { label: '联系人: ', name: 'Contacts', type: 'select', placeholder: '未定义' }
 
         ],
-        //自定义语言
-        i18n: {
-            "create": {
-                "button": '新增',
-                "title": '新增产品',
-                "submit": '提交'
-            },
-            "edit": {
-                "button": '修改',
-                "title": '产品管理',
-                "submit": '提交'
-            },
-            "multi": {
-                "title": "批量修改",
-                "info": "批量修改帮助您将所选单元格中的值修改为同一值，要继续修改请单击按钮",
-                "restore": "取消修改"
-            }
-        }
     });
+
 
     //主表
     var table;
     //产品明细调整编辑器
+    var mainpanel;
 
     //初始化报表
      table = $("#ProductTable").DataTable({
@@ -163,48 +147,42 @@
                     });
                     $("div#page-header").toggleClass("hidden", "show");
                     $("div#page-detail").toggleClass("hidden", "show");
+                    $("input").addClass("form-control");
+                    //$("label").removeClass();
+                    //$("label").css("display","flex","margin-left","15px");
                 }
             }
 
 
         ]
     });
-    //定义 Tab1 按键
-     function onPageDisplay(elm) {
-         var name = 'onPage' + Math.random();
-         var Editor = $.fn.dataTable.Editor;
-         var emptyInfo;
+     mainpanel = new $.fn.dataTable.Editor({
 
-         Editor.display[name] = $.extend(true, {}, Editor.models.display, {
-             // Create the HTML mark-up needed the display controller
-             init: function (editor) {
-                 emptyInfo = elm.html();
-                 return Editor.display[name];
-             },
+        idSrc: 'Product_Code',
+        table: '#ProductTable',
+        display: onPageDisplay($('#Product_Header')),
+        template: '#Product_Template',
+        fields: [
+            { label: 'Product_ID: ', name: 'Product_ID', type: 'hidden' },
+            { label: '产品编号: ', name: 'Product_Code',type:'readonly' },
+            { label: '产品名称: ', name: 'Product_Name' },
+            { label: '参考价: ', name: 'Unit_Price' },
+            { label: '图片路径: ', name: 'Product_Img' },
 
-             // Show the form
-             open: function (editor, form, callback) {
-                 elm.children().detach();
-                 elm.append(form);
 
-                 if (callback) {
-                     callback();
-                 }
-             },
 
-             // Hide the form
-             close: function (editor, callback) {
-                 elm.children().detach();
-                 elm.html(emptyInfo);
 
-                 if (callback) {
-                     callback();
-                 }
-             }
-         });
+            //门店查询条件
+            // { label: '商户代码: ', name: 'Merchant_Code' },
+            // { label: '商户名称: ', name: 'Merchant_Name' },
+            // { label: '门店代码: ', name: 'Store_Code', type: 'select', placeholder: '未定义' },
+            // { label: '门店名称: ', name: 'Store_Name', type: 'select', placeholder: '未定义' },
+            // { label: '地址: ', name: 'Address', type: 'select', placeholder: '未定义' },
+            // { label: '电话: ', name: 'Phone', type: 'select', placeholder: '未定义' },
+            // { label: '联系人: ', name: 'Contacts', type: 'select', placeholder: '未定义' }
 
-         return name;
-     }
+        ],
+    });
     //明细返回按钮
      $("button#search_return").click(function () {
         $("div#page-detail").toggleClass("hidden", "show");
