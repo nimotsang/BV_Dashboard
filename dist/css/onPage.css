@@ -1,0 +1,53 @@
+
+div.DTE div.DTE_Body div.DTE_Field {
+    padding: 0.7em 0 0 0;
+}
+div.DTE div.DTE_Body div.DTE_Field > label {
+    float: none;
+    clear: both;
+    width: 100%;
+}
+div.DTE div.DTE_Body div.DTE_Field > div.DTE_Field_Input {
+    float: none;
+    clear: both;
+    width: 100%;
+}
+
+div.DTE div.DTE_Header,
+div.DTE div.DTE_Footer {
+    background-color: transparent;
+    border-color: black
+}
+
+div.DTE div.DTE_Header {
+    height: 60px;
+}
+
+p.start-editing,
+p.add-new {
+    text-align: center;
+    font-size: 1.4em;
+    line-height: 1.4em;
+}
+
+
+p.start-editing {
+    padding-top: 7em;
+}
+
+#container {
+    display: flex;
+    align-items: stretch;
+}
+
+#table-container {
+    box-sizing: border-box;
+    width: 55%;
+    padding: 0 1em;
+}
+
+#form-container {
+    box-sizing: border-box;
+    width: 45%;
+    padding: 0 1em;
+}

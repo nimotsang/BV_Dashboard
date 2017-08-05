@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <!-- Bootstrap Core CSS -->
+    <!--<link href="../dist/css/onPage.css" rel="stylesheet">-->
 
     <title>亿惠权益管理平台</title>
     <!-- Menu File -->
@@ -35,7 +37,7 @@
                                 <!-- /.panel-heading -->
                                 <div class="row">
                                     <div class="panel-body">
-                                        <form>
+                                        <form id="Main_Panel">
                                             <div class="form-group">
                                                 <div class="col-xs-4">
                                                     <label for="ProductID">商品ID</label>
@@ -119,24 +121,22 @@
                                     <div class="panel-body">
                                         <form id="Product_Header">
                                             <div class="form-group">
-                                                <div class="col-xs-6">
-                                                    <editor-field name="Product_Code"></editor-field>
-                                                </div>
                                             </div>
+                                        </form>
+                                        <form id="Product_Template">
                                             <div class="form-group">
-                                                <div class="col-xs-6">
+                                                <div class="col-xs-4">
+                                                    <editor-field name="Product_Code"></editor-field>
+                                                    <editor-field name="Product_Img"></editor-field>
+                                                </div>
+                                                <div class="col-xs-4">
                                                     <editor-field name="Product_Name"></editor-field>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-xs-6">
+                                                <div class="col-xs-4">
                                                     <editor-field name="Unit_Price"></editor-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div class="col-xs-6">
-                                                    <editor-field name="Product_Img"></editor-field>
-                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -177,6 +177,7 @@
     </div>
     <!-- DMS JavaScript -->
     <script src="../js/common/sysSettings.js"></script>
+    <script src="../js/common/onPage.js"></script>
     <script src="../js/dashboard/product.js"></script>
 </body>
 
