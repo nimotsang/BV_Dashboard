@@ -43,14 +43,14 @@
         },
         idSrc: 'Product_Code',
         table: '#ProductTable',
-        display: onPageDisplay($('#Product_Header')),
-        template: '#Product_Template',
+        display: onPageDisplay($('#Product_Header_Display')),
+        template: '#Product_Header_Template',
         fields: [
             { label: 'Product_ID: ', name: 'Product_ID', type: 'hidden' },
             { label: '产品编号: ', name: 'Product_Code',type:'readonly' },
             { label: '产品名称: ', name: 'Product_Name' },
             { label: '参考价: ', name: 'Unit_Price' },
-            { label: '图片路径: ', name: 'Product_Img' },
+            { label: '图片路径: ', name: 'Product_Img' }
 
 
 
@@ -66,15 +66,23 @@
 
         ],
     });
+    var mainpanel = new $.fn.dataTable.Editor({
+
+        idSrc: 'Product_Code',
+        table: '#ProductTable',
+        display: onPageDisplay($('#Main_Panel_Display')),
+        template: '#Main_Panel_Template',
+        fields: [
+            { label: '产品代码: ', name: 'Product_Code'},
+            { label: '产品名称: ', name: 'Product_Name' },
+            { label: '参考价: ', name: 'Unit_Price' },
 
 
-    //主表
-    var table;
-    //产品明细调整编辑器
-    var mainpanel;
+        ]
+    });
 
     //初始化报表
-     table = $("#ProductTable").DataTable({
+    var table = $("#ProductTable").DataTable({
         processing: false,
         dom: 'Bfrtip',
         select: true,
@@ -156,33 +164,13 @@
 
         ]
     });
-     mainpanel = new $.fn.dataTable.Editor({
-
-        idSrc: 'Product_Code',
-        table: '#ProductTable',
-        display: onPageDisplay($('#Product_Header')),
-        template: '#Product_Template',
-        fields: [
-            { label: 'Product_ID: ', name: 'Product_ID', type: 'hidden' },
-            { label: '产品编号: ', name: 'Product_Code',type:'readonly' },
-            { label: '产品名称: ', name: 'Product_Name' },
-            { label: '参考价: ', name: 'Unit_Price' },
-            { label: '图片路径: ', name: 'Product_Img' },
 
 
-
-
-            //门店查询条件
-            // { label: '商户代码: ', name: 'Merchant_Code' },
-            // { label: '商户名称: ', name: 'Merchant_Name' },
-            // { label: '门店代码: ', name: 'Store_Code', type: 'select', placeholder: '未定义' },
-            // { label: '门店名称: ', name: 'Store_Name', type: 'select', placeholder: '未定义' },
-            // { label: '地址: ', name: 'Address', type: 'select', placeholder: '未定义' },
-            // { label: '电话: ', name: 'Phone', type: 'select', placeholder: '未定义' },
-            // { label: '联系人: ', name: 'Contacts', type: 'select', placeholder: '未定义' }
-
-        ],
-    });
+    //初始化查询窗体
+    mainpanel.create();
+    $("input").addClass("form-control");
+    //初始化按键
+    table.buttons().container().appendTo($("form#Main_Panel_Display"));
     //明细返回按钮
      $("button#search_return").click(function () {
         $("div#page-detail").toggleClass("hidden", "show");

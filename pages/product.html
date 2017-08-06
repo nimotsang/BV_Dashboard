@@ -37,44 +37,24 @@
                                 <!-- /.panel-heading -->
                                 <div class="row">
                                     <div class="panel-body">
-                                        <form id="Main_Panel">
+                                        <form id="Main_Panel_Display">
+                                            <div class="form-group">
+                                            </div>
+                                        </form>
+                                        <form id="Main_Panel_Template">
                                             <div class="form-group">
                                                 <div class="col-xs-4">
-                                                    <label for="ProductID">商品ID</label>
-                                                    <input type="text" class="form-control" id="ProductID" placeholder="商品ID">
+                                                    <editor-field name="Product_Code"></editor-field>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <div class="col-xs-4">
-                                                    <label for="Product_Name">商品名称</label>
-                                                    <input type="text" class="form-control" id="Product_Name" placeholder="商品名称">
+                                                    <editor-field name="Product_Name"></editor-field>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <div class="col-xs-4">
-                                                    <label for="Price">价格</label>
-                                                    <input type="text" class="form-control" id="Price" placeholder="价格">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="panel-body">
-                                                    <div class="form-group">
-                                                        <div class="col-xs-4">
-                                                            <label for="Selects">Selects</label>
-                                                            <select class="form-control" id="Selects">
-                                                                <option>1</option>
-                                                                <option>2</option>
-                                                                <option>3</option>
-                                                                <option>4</option>
-                                                                <option>5</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                    <editor-field name="Unit_Price"></editor-field>
                                                 </div>
                                             </div>
                                             <div class="col-xs-12">
-                                                <button type="submit" class="btn btn-primary" id="searchsubmit">查询</button>
-                                                <button type="reset" class="btn btn-default" id="searchreset">重置</button>
+
                                             </div>
 
                                         </form>
@@ -119,11 +99,11 @@
                                 <!-- /.panel-heading -->
                                 <div class="row">
                                     <div class="panel-body">
-                                        <form id="Product_Header">
+                                        <form id="Product_Header_Display">
                                             <div class="form-group">
                                             </div>
                                         </form>
-                                        <form id="Product_Template">
+                                        <form id="Product_Header_Template">
                                             <div class="form-group">
                                                 <div class="col-xs-4">
                                                     <editor-field name="Product_Code"></editor-field>
@@ -135,8 +115,6 @@
                                                 <div class="col-xs-4">
                                                     <editor-field name="Unit_Price"></editor-field>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                             </div>
                                         </form>
                                     </div>
