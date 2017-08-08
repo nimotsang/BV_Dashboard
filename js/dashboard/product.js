@@ -96,25 +96,6 @@
 /**        "columnDefs": [
             { "width": "20%", "targets": 0 }
         ], **/
-        ajax: {
-            "url": sysSettings.domainPath + "BVSP_PRODUCT_SEARCH",
-            "async": true,
-            "crossDomain": true,
-            "type": "POST",
-            "dataType": "json",
-            "contentType": "application/json; charset=utf-8",
-            "data": function () {
-                var param = {
-                    "token": SecurityManager.generate()
-                }
-                return JSON.stringify(param);
-            },
-            "dataSrc": function (data) {
-                data = data.ResultSets[0]
-                return data;
-
-            }
-        },
 
         language: {
             url: "../vendor/datatables/Chinese.json",
@@ -127,6 +108,23 @@
         },
         //添加按键 编辑，打印及导出
         buttons: [
+            {
+                text: '查询',
+                action: function () {
+
+                    var param={};
+                    if(mainpanel.field("Product_Code").val()){
+                        param.Product_Code=mainpanel.field("Product_Code").val();
+                    }else if(mainpanel.field("Product_Name").val()){
+                        param.Product_Name=mainpanel.field("Product_Name").val();
+                    }else if(mainpanel.field("Unit_Price").val()){
+                        param.Unit_Price=Number(mainpanel.field("Unit_Price").val());
+                    }
+
+                    initialtable(param);
+
+                }
+            },
             { extend: 'create', editor: editor, text: '新建' },
             { extend: 'edit', editor: editor, text: '修改' },
             { extend: 'print', text: '打印' },
@@ -170,13 +168,42 @@
     mainpanel.create();
     $("input").addClass("form-control");
     //初始化按键
-    table.buttons().container().appendTo($("form#Main_Panel_Display"));
+    table.on('init.dt',function (e,settings,json) {
+        table.buttons().container().appendTo($("form#Main_Panel_Display"));
+        $("div.dt-buttons.btn-group").css({"float":"right","padding-right":"15px"});
+    })
+
+
     //明细返回按钮
      $("button#search_return").click(function () {
         $("div#page-detail").toggleClass("hidden", "show");
         $("div#page-header").toggleClass("hidden", "show");
     })
-
+    //初始化主表数据
+    function initialtable(param) {
+        if(param){
+            param.token=SecurityManager.generate();
+        }else{
+            var param={token:SecurityManager.generate()};
+        }
+        $.ajax({
+            "url": sysSettings.domainPath + "BVSP_PRODUCT_SEARCH",
+            "async": true,
+            "crossDomain": true,
+            "type": "POST",
+            "dataType": "json",
+            "contentType": "application/json; charset=utf-8",
+            "data": JSON.stringify(param),
+            "success": function (data) {
+                data = data.ResultSets[0];
+                table.clear().draw();
+                data.forEach(function (node) {
+                    table.row.add(node);
+                })
+                table.draw();
+            }
+        });
+    }
 });
 
 
