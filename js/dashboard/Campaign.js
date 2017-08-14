@@ -93,6 +93,7 @@
         table: '#Campaign_Detail_Table2',
         fields: [
             { label: '活动ID: ', name: 'Campaign_ID', type: 'hidden' },
+            { label: '商品ID: ', name: 'Product_ID', type: 'hidden' },
             { label: '商品代码: ', name: 'Product_Code' },
             { label: '商品名称: ', name: 'Product_Name' },
             { label: '别名: ', name: 'Refernce_Name' },
@@ -173,25 +174,26 @@
            {
                text: '修改',
                action: function () {
-                   editor.edit(table.rows({ selected: true }));
-                   $("div#page-header").toggleClass("hidden", "show");
-                   $("div#page-detail").toggleClass("hidden", "show");
-                   $("input").addClass("form-control");
-                   buttonHeaderDisplay.container().appendTo($("form#Campaign_Header_Template"));
-                   $("div.dt-buttons.btn-group").css({ "float": "right", "padding-right": "0" });
+                   if (table.row({ selected: true }).node()) {
+                       editor.edit(table.rows({ selected: true }));
+                       $("div#page-header").toggleClass("hidden", "show");
+                       $("div#page-detail").toggleClass("hidden", "show");
+                       $("input").addClass("form-control");
+                       buttonHeaderDisplay.container().appendTo($("form#Campaign_Header_Template"));
+                       $("div.dt-buttons.btn-group").css({ "float": "right", "padding-right": "0" });
 
-                   var param = {};
-                   if (editor.field("Campaign_ID").val()) {
-                       param.append = true;
-                       param.Campaign_ID = editor.field("Campaign_ID").val();
-                       param.subTable = true;
-                       param.appendsubTableName1 = true;
-                       param.clearSubTableName1 = false;
-                       param.appendsubTableName2 = true;
-                       param.clearSubTableName2 = false;
-                       applyData("BVSP_CAMPAIGN_SEARCH_DETAIL", param, table_detail1,table_detail2,table_detail3);
+                       var param = {};
+                       if (editor.field("Campaign_ID").val()) {
+                           param.append = true;
+                           param.Campaign_ID = editor.field("Campaign_ID").val();
+                           param.subTable = true;
+                           param.appendsubTableName1 = true;
+                           param.clearSubTableName1 = true;
+                           param.appendsubTableName2 = true;
+                           param.clearSubTableName2 = true;
+                           applyData("BVSP_CAMPAIGN_SEARCH_DETAIL", param, table_detail1, table_detail2, table_detail3);
+                       }
                    }
-
                }
            },
             { extend: 'print', text: '打印' },
@@ -240,9 +242,10 @@
            {
                text: '修改',
                action: function () {
-
-                   editordetail1.edit(table_detail1.rows({ selected: true }));
-                   buttonEditorDetail1.container().appendTo("div.DTE_Footer.modal-footer")
+                   if (table_detail1.row({ selected: true }).node()) {
+                       editordetail1.edit(table_detail1.rows({ selected: true }));
+                       buttonEditorDetail1.container().appendTo("div.DTE_Footer.modal-footer")
+                   }
                }
            },
 
@@ -286,10 +289,10 @@
            {
                text: '修改',
                action: function () {
-
-                   editordetail2.edit(table_detail2.rows({ selected: true }));
-                   buttonEditorDetail2.container().appendTo("div.DTE_Footer.modal-footer")
-
+                   if (table_detail2.row({ selected: true }).node()) {
+                       editordetail2.edit(table_detail2.rows({ selected: true }));
+                       buttonEditorDetail2.container().appendTo("div.DTE_Footer.modal-footer")
+                   }
                }
            },
 
@@ -346,10 +349,10 @@
            {
                text: '修改',
                action: function () {
-
-                   editordetail3.edit(table_detail3.rows({ selected: true }));
-                   buttonEditorDetail3.container().appendTo("div.DTE_Footer.modal-footer")
-
+                   if (table_detail3.row({ selected: true }).node()) {
+                       editordetail3.edit(table_detail3.rows({ selected: true }));
+                       buttonEditorDetail3.container().appendTo("div.DTE_Footer.modal-footer")
+                   }                   
                }
            }
 
@@ -491,7 +494,7 @@
                                            param.Exclude_Type = editor.field("Exclude_Type").val();
                                            param.Exclude_Value = editor.field("Exclude_Value").val();
 
-                                           applyData("#", param, table);
+                                           applyData("#", param, table_detail1);
 
                                        }
                                    },
@@ -514,19 +517,22 @@
                                            var param = {};
                                            if (editordetail2.field("Campaign_ID").val()) {
                                                param.append = false;
-
+                                               param.Campaign_ID = editordetail2.field("Campaign_ID").val();
+                                               param.Product_ID = editordetail2.field("Product_ID").val();
                                            }
                                            else {
                                                param.append = true;
-                                               param.Campaign_ID = null;
+                                               param.Campaign_ID = editor.field("Campaign_ID").val();
+                                               param.Product_ID = editordetail2.field("Product_ID").val();
+                                               param.Product_Code = editordetail2.field("Product_Code").val();
+                                               param.Product_Name = editordetail2.field("Product_Name").val();
+                                               param.Product_Img = editordetail2.field("Product_Img").val();
+                                               param.Note = editordetail2.field("Note").val();
                                            }
-                                           param.Product_Code = editor.field("Product_Code").val();
-                                           param.Product_Name = editor.field("Product_Name").val();
-                                           param.Refernce_Name = editor.field("Refernce_Name").val();
-                                           param.Product_Img = editor.field("Product_Img").val();
-                                           param.Quantity = editor.field("Quantity").val();
-                                           param.Note = editor.field("Note").val();
-                                           applyData("#", param, table);
+                                           param.Refernce_Name = editordetail2.field("Refernce_Name").val();
+                                           param.Quantity = editordetail2.field("Quantity").val();
+                                           applyData("BVSP_CAMPAIGN_PRODUCT_UPDATE", param, table_detail2);
+
 
                                        }
                                    },
@@ -567,7 +573,7 @@
                                            param.Cost_Price = editor.field("Cost_Price").val();
                                            param.Start_Date = editor.field("Start_Date").val();
                                            param.End_Date = editor.field("End_Date").val();
-                                           applyData("#", param, table);
+                                           applyData("#", param, table_detail3);
 
                                        }
                                    },
