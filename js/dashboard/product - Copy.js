@@ -73,8 +73,8 @@
         display: onPageDisplay($('#Main_Panel_Display')),
         template: '#Main_Panel_Template',
         fields: [
-            { label: '商品代码: ', name: 'Product_Code'},
-            { label: '商品名称: ', name: 'Product_Name' },
+            { label: '产品代码: ', name: 'Product_Code'},
+            { label: '产品名称: ', name: 'Product_Name' },
             { label: '参考价: ', name: 'Unit_Price' },
 
 
@@ -114,35 +114,14 @@
 
                     var param = {};
                     param.clearTable = true;
-                    //组合搜索条件
-                    for (var item in mainpanel.fields()) {
-                        switch (mainpanel.fields()[item]) {
-                            case "Product_Code": {
-                                if (mainpanel.field("Product_Code").val()) {
-                                    if (!param.Product_Code) {
-                                        param.Product_Code = mainpanel.field("Product_Code").val();
-                                    }
-                                    break;
-                                }
-                            }
-                            case "Product_Name": {
-                                if (mainpanel.field("Product_Name").val()) {
-                                    if (!param.Product_Name) {
-                                        param.Product_Name = mainpanel.field("Product_Name").val();
-                                    }
-                                    break;
-                                }
-                            }
-                            case "Unit_Price": {
-                                if (mainpanel.field("Unit_Price").val()) {
-                                    if (!param.Unit_Price) {
-                                        param.Unit_Price = mainpanel.field("Unit_Price").val();
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                    if(mainpanel.field("Product_Code").val()){
+                        param.Product_Code=mainpanel.field("Product_Code").val();
+                    }else if(mainpanel.field("Product_Name").val()){
+                        param.Product_Name=mainpanel.field("Product_Name").val();
+                    }else if(mainpanel.field("Unit_Price").val()){
+                        param.Unit_Price=Number(mainpanel.field("Unit_Price").val());
                     }
+
                     applyData(table, "BVSP_PRODUCT_SEARCH",param);
 
                 }

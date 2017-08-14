@@ -1,7 +1,7 @@
 ﻿// DB Web API Server 
 var sysSettings ={
-    "domainPath": "http://www.billionvouchers.com/BVwebapi/"
-    //"domainPath": "http://desktop-idhm2sh/bvwebapi/"
+    //"domainPath": "http://www.billionvouchers.com/BVwebapi/"
+    "domainPath": "http://desktop-idhm2sh/BVWebapi/"
     //"domainPath": "https://dev.mbeta.pw/mocdbapi/"
 };
 
