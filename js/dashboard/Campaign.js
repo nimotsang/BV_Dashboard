@@ -191,7 +191,7 @@
                            param.clearSubTableName1 = true;
                            param.appendsubTableName2 = true;
                            param.clearSubTableName2 = true;
-                           applyData("BVSP_CAMPAIGN_SEARCH_DETAIL", param, table_detail1, table_detail2, table_detail3);
+                           applyData("BVSP_CAMPAIGN_SEARCH_DETAIL", param, table_detail1, null,table_detail2, table_detail3);
                        }
                    }
                }
@@ -448,10 +448,11 @@
                                                param.Campaign_Code = null;
                                            }
                                            param.Campaign_Name = editor.field("Campaign_Name").val();
-                                           param.Start_Date = Number(editor.field("Start_Date").val());
-                                           param.End_Date = Number(editor.field("End_Date").val());
+                                           param.Start_Date = editor.field("Start_Date").val();
+                                           param.End_Date = editor.field("End_Date").val();
 
                                            applyData("BVSP_CAMPAIGN_UPDATE", param, table);
+
 
                                        }
                                    },
@@ -531,7 +532,7 @@
                                            }
                                            param.Refernce_Name = editordetail2.field("Refernce_Name").val();
                                            param.Quantity = editordetail2.field("Quantity").val();
-                                           applyData("BVSP_CAMPAIGN_PRODUCT_UPDATE", param, table_detail2);
+                                           applyData("BVSP_CAMPAIGN_PRODUCT_UPDATE", param, table_detail2,editordetail2);
 
 
                                        }

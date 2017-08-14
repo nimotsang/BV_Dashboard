@@ -38,8 +38,8 @@ function onPageDisplay(elm) {
     return name;
 };
 
-//ÐÂÔö»òÕßÐÞ¸ÄÊý¾Ý
-function applyData(SP_Name, param,tablename1, subtablename1,subtablename2) {
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½
+function applyData(SP_Name, param,tablename1,editername1,subtablename1,subtablename2) {
     if (param) {
         param.token = SecurityManager.generate();
     } else {
@@ -69,11 +69,19 @@ function applyData(SP_Name, param,tablename1, subtablename1,subtablename2) {
                         if (param.append == false) {
                             tablename1.row({ selected: true }).data(subData[0]);
                             tablename1.page(tablename1.rows({ selected: true }).data().page()).draw('page');
+                            if(editername1){
+                                editername1.close();
+                            }
+
                         } else {
                             subData.forEach(function (node) {
                                 tablename1.row.add(node);
                                 tablename1.draw();
                             })
+                            if(editername1){
+                                editername1.close();
+                            }
+
                         }
                         break;
                     }

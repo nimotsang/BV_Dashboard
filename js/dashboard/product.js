@@ -143,7 +143,7 @@
                             }
                         }
                     }
-                    applyData(table, "BVSP_PRODUCT_SEARCH",param);
+                    applyData("BVSP_PRODUCT_SEARCH",param,table);
 
                 }
             },
@@ -241,7 +241,7 @@
                     param.Unit_Price = Number(editor.field("Unit_Price").val());
                     param.Product_Img = Number(editor.field("Product_Img").val());
 
-                    applyData(table, "BVSP_PRODUCT_UPDATE", param);
+                    applyData("BVSP_PRODUCT_UPDATE", param,table);
 
                 }
             },
@@ -274,47 +274,6 @@
         $("div.dt-buttons.btn-group").css({ "float": "right", "padding-right": "15px" });
     });
 
-
-    ////明细返回按钮
-    // $("button#search_return").click(function () {
-    //    $("div#page-detail").toggleClass("hidden", "show");
-    //    $("div#page-header").toggleClass("hidden", "show");
-    //})
-    //新增或者修改数据
-     function applyData(tablename,SP_Name, param) {
-        if (param) {
-            param.token = SecurityManager.generate();
-        } else {
-            var param = { token: SecurityManager.generate() };
-        }
-        if (!tablename) {
-            var tablename = table;
-        }
-        $.ajax({
-            "url": sysSettings.domainPath + SP_Name,
-            "async": true,
-            "crossDomain": true,
-            "type": "POST",
-            "dataType": "json",
-            "contentType": "application/json; charset=utf-8",
-            "data": JSON.stringify(param),
-            "success": function (data) {
-                data = data.ResultSets[0];
-                if (param.clearTable == true) {
-                    tablename.clear();
-                }
-                if (param.append == false) {
-                    tablename.row({ selected: true }).data(data[0]);
-                    tablename.page(tablename.rows({ selected: true }).data().page()).draw('page');
-                } else {
-                    data.forEach(function (node) {
-                        tablename.row.add(node);
-                        tablename.draw();
-                })
-                }
-            }
-        });
-    }
 });
 
 
